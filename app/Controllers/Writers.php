@@ -21,7 +21,7 @@ class Writers extends ResourceController
     {
         $data = $this->model->find($id);
         if (!$data) {
-            return $this->failNotFound('Item not found');
+            return $this->failNotFound('Writer not found');
         }
         return $this->respond($data);
     }
@@ -30,30 +30,31 @@ class Writers extends ResourceController
     public function create()
     {
         $input = $this->request->getJSON(true);
-        log_message('debug', print_r($input, true));  // Log the input for debugging
-
+        
         if (empty($input)) {
             return $this->fail('No data provided');
         }
         
-        
         if ($this->model->insert($input)) {
-            print_r($this->model->errors); die;
             return $this->respondCreated($input);
         }
+        
         return $this->failValidationErrors($this->model->errors());
     }
 
     // PUT /writers/{id}
     public function update($id = null)
     {
-        $input = $this->request->getRawInput();
+        $input = $this->request->getJSON(true);
+        
         if (!$this->model->find($id)) {
-            return $this->failNotFound('Item not found');
+            return $this->failNotFound('Writer not found');
         }
+                
         if ($this->model->update($id, $input)) {
             return $this->respond($input);
         }
+        
         return $this->failValidationErrors($this->model->errors());
     }
 
@@ -61,9 +62,9 @@ class Writers extends ResourceController
     public function delete($id = null)
     {
         if (!$this->model->find($id)) {
-            return $this->failNotFound('Item not found');
+            return $this->failNotFound('Writer not found');
         }
         $this->model->delete($id);
-        return $this->respondDeleted(['id' => $id, 'message' => 'Item deleted']);
+        return $this->respondDeleted(['id' => $id, 'message' => 'Writer deleted']);
     }
 }

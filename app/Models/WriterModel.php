@@ -12,7 +12,7 @@ class WriterModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['last_name, first_name, bio, ratings, created_at, updated_at'];
+    protected $allowedFields    = ['last_name', 'first_name', 'middle_initial', 'bio', 'ratings', 'created_at', 'updated_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
