@@ -21,10 +21,13 @@ class Writers extends ResourceController
     // GET /writers/{id}
     public function show($id = null)
     {
-        $data = $this->model->find($id);
+        $data = $this->model->findOrderWriterById($id);
         if (!$data) {
             return $this->failNotFound('Writer not found');
         }
+        
+        $order = new OrderModel();
+        $data['orders'] = $order->find($data['order_id']);
         return $this->respond($data);
     }
 

@@ -43,4 +43,10 @@ class WriterModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function findOrderWriterById($id) {
+        return $this->join('order_writer', 'order_writer.writer_id = writers.id')
+        ->where('writers.id', $id)
+        ->first();
+    }
 }
