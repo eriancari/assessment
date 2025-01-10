@@ -12,4 +12,5 @@ $routes->get('/', 'Home::index');
 // $routes->get('/(:segment)', [Pages::class, 'view']);
 
 $routes->resource('writers');
+$routes->post('writers/hire', 'Writers::hire');
 $routes->resource('orders');

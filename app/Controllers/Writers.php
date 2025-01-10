@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Models\OrderModel;
+use App\Models\OrderWriter;
 use App\Models\Writer;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -66,5 +68,46 @@ class Writers extends ResourceController
         }
         $this->model->delete($id);
         return $this->respondDeleted(['id' => $id, 'message' => 'Writer deleted']);
+    }
+
+    // Hire Writer
+    public function hire() 
+    {
+        $input = $this->request->getJSON(true);
+        $order_id = $input['order_id'] ?? 0;
+        // check order ID if it exists
+        if (!$order_id) {
+            return $this->fail('Order ID is required.');
+        }
+
+        $orderModel = new OrderModel();
+        $orderExist = $orderModel->find($order_id);
+
+        if (!$orderExist) {
+            return $this->failNotFound('Order not Found');
+        }
+
+        // check writer ID if it exists
+        $writer_id = $input['writer_id'] ?? 0;
+        if (!$writer_id) {
+            return $this->fail('Writer ID is required.');
+        }
+
+        $writerExists = $this->model->find($writer_id);
+        if (!$writerExists) {
+            return $this->fail('Writer ID not found.');
+        }
+
+        // then assign
+        $orderWriter = new OrderWriter();
+
+        $data = [
+            'order_id' => $order_id,
+            'writer_id' => $writer_id
+        ];
+
+        if ($orderWriter->insert($data)) {
+            return $this->respond(['message' => 'Writer hired successfully']);
+        }
     }
 }
